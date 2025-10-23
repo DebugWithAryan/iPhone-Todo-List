@@ -14,7 +14,6 @@ A modern, feature-rich ToDo List application built with SwiftUI that connects to
 - 🔌 RESTful API integration
 - ⚡ Async/await for network operations
 - 🔔 Error handling with user-friendly alerts
-- 🔄 Pull to refresh functionality
 - 📱 Native iOS experience
 
 ## 🎥 Demo
