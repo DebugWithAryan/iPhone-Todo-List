@@ -57,11 +57,22 @@ class TodoService {
         let (data, _) = try await URLSession.shared.data(for: request)
         return try JSONDecoder().decode(Todo.self, from: data)
     }
+    
+    func deleteTodo(id: Int) async throws {
+        guard let url = URL(string: "\(baseUrl)/\(id)") else {
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        
+        _ = try await URLSession.shared.data(for: request)
+    }
 }
 
 struct TodoRowView: View {
     let todo: Todo
     let onToggle: () -> Void
+    let onDelete: () -> Void
     
     var body: some View {
         HStack(spacing: 12) {
@@ -86,7 +97,14 @@ struct TodoRowView: View {
                 }
             }
             Spacer()
+            
+            Button(action: onDelete) {
+                Image(systemName: "trash")
+                    .foregroundColor(.red)
+            }
+            .buttonStyle(PlainButtonStyle())
         }
+        .padding(.vertical,8)
     }
 }
 
@@ -172,6 +190,9 @@ struct ContentView: View {
                                 todo: todo,
                                 onToggle: {
                                     viewModel.toggleTodoCompletion(todo)
+                                },
+                                onDelete: {
+                                    viewModel.deleteTodo(todo)
                                 }
                             )
                         }

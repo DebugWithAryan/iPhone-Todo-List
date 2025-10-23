@@ -65,6 +65,23 @@ class TodoViewModel: ObservableObject {
             }
         }
     }
+    
+    func deleteTodo(_ todo: Todo){
+        guard let id = todo.id else {return}
+        
+        Task{
+            do {
+                try await service.deleteTodo(id: id)
+                todos.removeAll{
+                    $0.id == id
+                }
+            }catch{
+                errorMessage = "Failed to delete todo"
+                showError = true
+            }
+        }
+    }
+    
 }
 
     
