@@ -69,9 +69,68 @@ class TodoService {
     }
 }
 
+struct EditTodoView: View{
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var viewModel: TodoViewModel
+    let todo: Todo
+    
+    @State private var title: String
+    @State private var description: String
+    
+    init(viewModel: TodoViewModel, todo: Todo){
+        self.viewModel = viewModel
+        self.todo = todo
+        _title = State(initialValue: todo.title)
+        _description = State(initialValue: todo.description ?? "")
+    }
+    var body: some View{
+        NavigationView{
+            Form{
+                Section(header: Text("Todo Details")){
+                    TextField("Title", text: $title)
+                    
+                    TextField("Description (optional", text: $description, axis: .vertical)
+                        .lineLimit(3...6)
+                }
+            }
+            .navigationTitle("Edit Todo")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar{
+                ToolbarItem(placement: .navigationBarLeading){
+                    Button("Cancel"){
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button("Save"){
+                        Task{
+                            await updateTodo()
+                        }
+                    }
+                    .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+        }
+    }
+    private func updateTodo() async{
+        let updatedTodo = Todo(
+            id: todo.id,
+            title: title,
+            description: description.isEmpty ? nil : description,
+            completed: todo.completed,
+            createdAt: todo.createdAt,
+            updatedAt: todo.updatedAt
+        )
+        await viewModel.updateTodo(updatedTodo)
+        dismiss()
+    }
+}
+
 struct TodoRowView: View {
     let todo: Todo
     let onToggle: () -> Void
+    let onEdit:() -> Void
     let onDelete: () -> Void
     
     var body: some View {
@@ -97,6 +156,12 @@ struct TodoRowView: View {
                 }
             }
             Spacer()
+            
+            Button(action: onEdit){
+                Image(systemName: "pencil")
+                    .foregroundColor(.blue)
+            }
+            .buttonStyle(PlainButtonStyle())
             
             Button(action: onDelete) {
                 Image(systemName: "trash")
@@ -163,6 +228,8 @@ struct ContentView: View {
     @StateObject private var viewModel = TodoViewModel()
     
     @State private var showingAddTodo = false
+    @State private var selectedTodo : Todo?
+    
     
     var body: some View {
         NavigationView {
@@ -191,6 +258,9 @@ struct ContentView: View {
                                 onToggle: {
                                     viewModel.toggleTodoCompletion(todo)
                                 },
+                                onEdit: {
+                                    selectedTodo = todo
+                                },
                                 onDelete: {
                                     viewModel.deleteTodo(todo)
                                 }
@@ -218,6 +288,10 @@ struct ContentView: View {
             .sheet(isPresented: $showingAddTodo) {
                 AddTodoView(viewModel: viewModel)
             }
+            .sheet(item: $selectedTodo) { todo in
+                EditTodoView(viewModel: viewModel, todo: todo)
+            }
+
             .task {
                 await viewModel.loadTodos()
             }

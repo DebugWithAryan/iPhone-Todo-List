@@ -82,6 +82,18 @@ class TodoViewModel: ObservableObject {
         }
     }
     
+    func updateTodo(_ todo: Todo) async {
+        do{
+            let updated = try await service.updateTodo(todo)
+            if let index = todos.firstIndex(where: {$0.id == updated.id}){
+                todos[index] = updated
+            }
+        }catch{
+            errorMessage = "Failed to update todo"
+            showError = true
+        }
+    }
+    
 }
 
     
