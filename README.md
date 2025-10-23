@@ -2,8 +2,6 @@
 
 A modern, feature-rich ToDo List application built with SwiftUI that connects to a RESTful API backend. Manage your tasks efficiently with a clean and intuitive interface.
 
-![App Demo](assets/demo.gif)
-![App Screenshot](assets/screenshot.png)
 
 ## ✨ Features
 
@@ -18,11 +16,14 @@ A modern, feature-rich ToDo List application built with SwiftUI that connects to
 
 ## 🎥 Demo
 
-> Add your demo video here
+<video src="images/demo.mov" controls width="80%"></video>
 
 ## 📸 Screenshots
-
-> Add your app screenshots here
+<p align="center">
+  <img src="images/screenshot1.png" width="30%" />
+  <img src="images/screenshot2.png" width="30%" />
+  <img src="images/screenshot3.png" width="30%" />
+</p>
 
 ## 🛠 Technologies Used
 
