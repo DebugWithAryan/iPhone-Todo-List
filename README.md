@@ -3,6 +3,10 @@
 A modern, feature-rich ToDo List application built with SwiftUI that connects to a RESTful API backend. Manage your tasks efficiently with a clean and intuitive interface.
 
 
+### 🎓 Preparing for Interviews or Exams?
+[![Interview Questions](https://img.shields.io/badge/📚_Interview_Questions-Click_Here-blue?style=for-the-badge)](./Questions.md)
+**Master the concepts behind this project!** We've prepared 50+ comprehensive questions covering SwiftUI, MVVM, async/await, networking, Combine, and more. Each question includes detailed answers with real examples from this codebase. Perfect for iOS development interview preparation! 🚀
+
 ## ✨ Features
 
 - ✅ Create, read, update, and delete todos
